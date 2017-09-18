@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <title>hello velocity1212</title>
+        <script>
+
+        </script>
+    </head>
+##    velocity 中文乱码待解决
+    <body>
+        <div>
+            <h1>${hello}</h1>
+        </div>
+        <div>
+            #set($name = 'shefenfei')
+            #set($age = 1)
+            current User is $name , age is $age;
+        </div>
+
+        <div>
+            #set($list = ['a','b','c','d'])
+            #foreach($item in $list)
+            $item
+            $velocityCount
+        #end
+        </div>
+
+        <div>
+            #set($currentUser = 'shefenfei')
+            #if ($currentUser == 'shefenfei')
+                    <div>if条件执行</div>
+                    <div>hahhaa</div>
+            #elseif($currentUser == 'zhangwentao')
+                    <div>else 条件</div>
+            #end
+        </div>
+    </body>
+</html>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fenfei.ssh.dao.IAdminDao">
+    <!--管理员登录-->
+    <resultMap id="loginResult" type="com.fenfei.ssh.pojos.system.Administrator">
+        <id column="id" property="id"/>
+        <result column="admin_name" property="adminName"/>
+        <result column="admin_pass" property="adminPass"/>
+    </resultMap>
+    <select id="login" parameterType="java.lang.String" resultMap="loginResult">
+        SELECT * FROM  tb_admin WHERE tb_admin.admin_name = #{username} AND tb_admin.admin_pass = #{password};
+    </select>
+    <!--登录结束-->
+
+    <!--根据用户名获取用户-->
+    <resultMap id="adminResult" type="com.fenfei.ssh.pojos.system.Administrator">
+        <id column="id" property="id"/>
+        <result column="admin_name" property="adminName"/>
+        <result column="admin_pass" property="adminPass"/>
+    </resultMap>
+    <select id="getAdminByName" parameterType="java.lang.String" resultMap="adminResult">
+        SELECT * FROM tb_admin WHERE tb_admin.admin_name = #{username} ;
+    </select>
+
+
+    <!--http://www.cnblogs.com/wucj/p/5148813.html   多表联合查询-->
+    <!--获取管理员角色-->
+    <resultMap id="roleAndPermsResult" type="com.fenfei.ssh.pojos.system.Administrator">
+        <id column="id" property="id"/>
+        <id column="admin_name" property="adminName"/>
+        <id column="admin_pass" property="adminPass"/>
+        <!--查角色-->
+        <collection property="roles" ofType="com.fenfei.ssh.pojos.system.Role">
+            <id column="id" property="id"/>
+            <result column="role_id" property="roleId"/>
+            <result column="role_name" property="roleName"/>
+            <result column="role_description" property="roleDescription"/>
+        </collection>
+        <!--查权限-->
+        <collection property="permissions" ofType="com.fenfei.ssh.pojos.system.Permission">
+            <id column="id" property="id"/>
+            <result column="perms_id" property="permId"/>
+            <result column="perms_name" property="permName"/>
+            <result column="perms_description" property="permDescription"/>
+        </collection>
+    </resultMap>
+
+    <select id="getAdminById" parameterType="int" resultMap="roleAndPermsResult">
+        SELECT
+          tb_admin.admin_name ,
+          tb_roles.role_name ,
+          tb_perms.perms_name ,
+          tb_perms.perms_description
+              FROM tb_admin
+              LEFT JOIN tb_admin_role ON tb_admin_role.admin_id = tb_admin.id
+              LEFT JOIN tb_roles ON tb_admin_role.role_id = tb_roles.id
+              LEFT JOIN tb_role_perms ON tb_role_perms.rid = tb_roles.id
+              LEFT JOIN tb_perms ON tb_perms.id = tb_role_perms.pid
+              WHERE tb_admin.id = #{adminId};
+    </select>
+
+
+    <!--获取所有的管理员数据-->
+    <resultMap id="adminsResult" type="com.fenfei.ssh.pojos.system.Administrator">
+        <id column="id" property="id"/>
+        <result column="admin_name" property="adminName"/>
+        <result column="admin_pass" property="adminPass"/>
+        <!--查角色-->
+        <collection property="roles" ofType="com.fenfei.ssh.pojos.system.Role">
+            <id column="id" property="id"/>
+            <result column="role_id" property="roleId"/>
+            <result column="role_name" property="roleName"/>
+            <result column="role_description" property="roleDescription"/>
+        </collection>
+    </resultMap>
+    <select id="getAllAdmin" resultMap="adminsResult">
+        SELECT
+          tb_admin.id,
+          tb_admin.admin_name ,
+          tb_roles.id,
+          tb_roles.role_name
+              FROM tb_admin
+              LEFT JOIN tb_admin_role ON tb_admin_role.admin_id = tb_admin.id
+              LEFT JOIN tb_roles ON tb_admin_role.role_id = tb_roles.id;
+    </select>
+
+    <!--获取所有的角色数据-->
+    <resultMap id="roleResult" type="com.fenfei.ssh.pojos.system.Role">
+        <id column="id" property="id"/>
+        <result column="role_name" property="roleName"/>
+    </resultMap>
+    <select id="getAllRoles" resultMap="roleResult">
+        SELECT tb_roles.id, tb_roles.role_name
+          FROM tb_roles ;
+    </select>
+
+
+    <!--获取所有的权限数据-->
+    <resultMap id="permsResult" type="com.fenfei.ssh.pojos.system.Permission">
+        <id column="id" property="id"/>
+        <result column="perms_name" property="permName"/>
+    </resultMap>
+    <select id="getAllPerms" resultMap="permsResult">
+        SELECT tb_perms.id, tb_perms.perms_name
+        FROM tb_perms ;
+    </select>
+
+
+    <!--添加新管理员(正常)-->
+    <insert id="addNewAdmin" parameterType="com.fenfei.ssh.pojos.system.Administrator"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_admin (admin_name, admin_pass)
+          VALUES (#{adminName}, #{adminPass});
+    </insert>
+
+    <!--添加角色-->
+    <insert id="addAdminRoles" parameterType="map">
+        INSERT INTO tb_admin_role ( admin_id , role_id )
+          VALUES
+            <foreach collection="list" item="adminRole" separator=",">
+                ( #{adminRole.adminId} , #{adminRole.roleId})
+            </foreach>
+    </insert>
+
+
+    <!--获取所有的管理员数据（测试，可删）-->
+    <resultMap id="adminsResult1" type="com.fenfei.ssh.pojos.system.Administrator">
+        <id column="id" property="id"/>
+        <result column="admin_name" property="adminName"/>
+        <result column="admin_pass" property="adminPass"/>
+    </resultMap>
+    <select id="getAdminInIds" resultMap="adminsResult1">
+        SELECT
+          tb_admin.admin_name ,
+          tb_admin.id ,
+          tb_admin.admin_pass
+          FROM tb_admin
+          WHERE tb_admin.id IN
+            <foreach collection="list" open="(" separator="," close=")" item="id" index="i">
+              #{id}
+            </foreach>
+    </select>
+
+    <select id="addAdminRoles1" parameterType="map">
+        INSERT INTO tb_admin_role ( admin_id , role_id )
+        VALUES
+        <foreach collection="_parameter" item="adminRole" index="key" separator=",">
+            ( #{key} , #{adminRole})
+        </foreach>
+    </select>
+
+</mapper>

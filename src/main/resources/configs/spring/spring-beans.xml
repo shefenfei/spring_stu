@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--c:xxxx 是指构造函数  p:xxx 是指Bean的属性-->
+    <!--使用构造函数的方式DI -->
+    <!--<bean id="teacher"-->
+          <!--class="com.fenfei.ssh.pojos.Teacher" c:name="t1" c:age="27">-->
+        <!--<constructor-arg name="name" value="hahha" index="0" type="java.lang.String"/>-->
+        <!--<constructor-arg name="age" value="1" index="1" type="int"/>-->
+        <!--<property name="name" value="zhangwentao"/>-->
+        <!--<property name="age" value="27"/>-->
+        <!--<property name="user" ref="user1"/>-->
+        <!--<property name="map">-->
+            <!--<map>-->
+                <!--<entry key="aaa" value="aaa"/>-->
+            <!--</map>-->
+        <!--</property>-->
+<!---->
+        <!--<property name="list">-->
+            <!--<list>-->
+                <!--<value>asa</value>-->
+                <!--<value>1</value>-->
+                <!--<value>2</value>-->
+                <!--<value>3</value>-->
+                <!--<value>aaa</value>-->
+                <!--<value>aaa</value>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+<!---->
+    <!--<bean id="user1" class="com.fenfei.ssh.pojos.User" p:uId="" p:password="" p:username=".."/>-->
+<!---->
+
+    <!--<context:property-placeholder location="classpath:configs/jdbc/.properties"/>-->
+
+    <!-- 这两个等价的
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="configs/jdbc/application.properties"/>
+    </bean>
+    -->
+
+    <!--给bean设置别名-->
+    <!--<alias name="teacher" alias="${welcome.springmvc}" />-->
+
+    <!--<bean class="com.fenfei.ssh.pojos.User" p:username="${jdbc.username}"/>-->
+
+</beans>

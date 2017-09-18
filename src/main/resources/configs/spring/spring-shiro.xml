@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <description>Shiro权限框架配置</description>
+
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="shiroRealm"/>
+    </bean>
+
+    <!--定义用记数据域-->
+    <bean id="shiroRealm" class="com.fenfei.ssh.shiro.AdminRealm"/>
+
+    <!--Shiro的核心过滤器-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 要求登录时的链接(登录页面地址)，非必须的属性，默认会自动寻找Web工程根目录下的"/login.jsp"页面 -->
+        <property name="loginUrl" value="/system/adminLogin"/>
+        <!-- 登录成功后要跳转的连接,因为登录成功后的处理逻辑在LoginController里硬编码 -->
+        <!--<property name="successUrl" value="/ssh/home/index"/>-->
+        <!-- 用户访问未对其授权的资源时，所显示的连接 -->
+        <property name="unauthorizedUrl" value="/"/>
+        <property name="filterChainDefinitions">
+            <value>
+                <!--contextPath + 模块path + 方法path-->
+                /user/userList = authc
+                /user/addNewUser = authc , perms[admin:add]
+                /system/adminList = authc , roles[super_admin]
+                /system/delAdminById = authc , roles[super_admin]
+                /system/signOut = logout
+                /user/userDetail = authc
+                /user/testRedis = authc
+                /home/index = authc
+                /statics/** = anon
+                <!--/** = authc-->
+            </value>
+        </property>
+        <property name="filters">
+            <map>
+                <entry key="logout" value-ref="logout" />
+            </map>
+        </property>
+    </bean>
+
+    <!--退出登录-->
+    <bean id="logout"
+            class="org.apache.shiro.web.filter.authc.LogoutFilter">
+        <property name="redirectUrl" value="/system/adminLogin"/>
+    </bean>
+
+    <bean id="lifecycleBeanPostProcessor"
+          class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!--以下两个bean 为了启用注解方式-->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"/>
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+</beans>
