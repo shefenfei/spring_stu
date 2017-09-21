@@ -326,7 +326,7 @@
 
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
+        <finalName>${project.artifactId}-${build.profile.id}-${project.version}</finalName>
 
         <sourceDirectory>src/main/java</sourceDirectory>
 
