@@ -14,7 +14,7 @@
     <bean id="placeholderConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations"
-                  value="classpath:configs/application.properties, classpath:configs/*/*.properties"/>
+                  value="classpath:configs/*/*.properties"/>
     </bean>
 
     <!--使用session实现国际化-->
