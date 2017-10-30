@@ -24,3 +24,18 @@ spring_stu.iml
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+.DS_Store
+src/.DS_Store
+src/main/.DS_Store
+src/main/java/com/fenfei/ssh/dao/impl/
+src/main/resources/configs/.DS_Store
+src/main/webapp/.DS_Store
+src/main/webapp/WEB-INF/.DS_Store
+src/main/webapp/WEB-INF/views/user/
+src/main/webapp/statics/.DS_Store
+src/main/webapp/statics/bootstrap/.DS_Store
+src/main/webapp/statics/bootstrap/core/.DS_Store
+src/main/webapp/statics/easyui/themes/.DS_Store
+src/main/webapp/statics/easyui/themes/bootstrap/.DS_Store
+src/main/webapp/statics/easyui/themes/default/.DS_Store
+src/main/webapp/statics/js/
