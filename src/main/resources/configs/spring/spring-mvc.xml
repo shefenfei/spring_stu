@@ -14,7 +14,7 @@
     <context:annotation-config/>
 
     <!--自动扫描包controller包-->
-    <context:component-scan base-package="com.fenfei.ssh.controller"/>
+    <context:component-scan base-package="com.fenfei.ssh.controller , com.fenfei.ssh.utils"/>
 
     <!--在spring-mvc中扫描AOP的东西，使得Controller AOP生效-->
     <import resource="spring-aop.xml"/>

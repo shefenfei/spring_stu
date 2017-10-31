@@ -167,7 +167,6 @@
         </dependency>
         <!--end -->
 
-
         <!--c3p0数据源-->
         <dependency>
             <groupId>com.mchange</groupId>
@@ -260,6 +259,13 @@
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>${common-log.version}</version>
+        </dependency>
+
+        <!--swagger-->
+        <dependency>
+            <groupId>com.mangofactory</groupId>
+            <artifactId>swagger-springmvc</artifactId>
+            <version>0.9.5</version>
         </dependency>
 
     </dependencies>
